@@ -1,4 +1,5 @@
 const poke_container = document.getElementById('poke_container');
+const pokeCache = {};
 const pokemons_number = 493;
 const types = {
 	fire: 'rgb(247 163 163)',
@@ -37,7 +38,6 @@ const getPokemon = async id => {
 };
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
-	console.log('asdas');
 }
 
 function createPokemonCard(pokemon) {
@@ -78,10 +78,15 @@ function createPokemonCard(pokemon) {
 	poke_container.appendChild(pokemonEl);
 }
 const selectPokemon = async (id) => {
-	const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-	const res = await fetch(url);
-	const pokemon = await res.json();
-	displayPopup(pokemon);
+	if(!pokeCache[id]){
+		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+		const res = await fetch(url);
+		const pokemon = await res.json();
+		pokeCache[id] = pokemon;
+		console.log(pokeCache);
+		displayPopup(pokemon);
+	}
+	displayPopup(pokeCache[id]);
 };
 
 const displayPopup = (pokemon) => {
@@ -95,7 +100,7 @@ const displayPopup = (pokemon) => {
  	const poke_types = pokemon.types.map((type) => type.type.name);
  	const background = main_types.find(type => poke_types.indexOf(type) == 0);
  	const type = pokemon.types.map((type) => type.type.name).join(', ');
-	const name = pokemon.name[0].toUpperCase() + pokemon.name.slice(1);
+	const name = pokemon.name;
 	const color = types[background];
 	const base_stats = pokemon.stats.map((stat) => stat.base_stat);
 	let test = stat => base_stats.indexOf(stat)==0;
@@ -124,28 +129,28 @@ const displayPopup = (pokemon) => {
 				}.png" alt="${name}" />
 	</div>
 	<div class="info">
-		<small class="type">Type: <span>${type}</span></small><br><br>
-		<small class="weight">Weight: <span>${pokemon.weight}</span></small><br>
-		<small class="height">Height: <span>${pokemon.height}</span></small><br><br>
+		<div class="type">Type: ${type}</div><br>
+		<div class="weight">Weight: ${pokemon.weight} kg</div>
+		<div class="height">Height: ${pokemon.height} m</div><br>
 
 		<div class="detail-stats">
 			<div class="detail-stats-row">
-			<small class="hp">HP: <span>${hp}</span></small>
+			<class="hp">HP: ${hp}
 			</div>
 			<div class="detail-stats-row">
-			<small class="atk">ATK: <span>${atk}</span></small>
+			<class="atk">ATK: ${atk}
 			</div>
 			<div class="detail-stats-row">
-			<small class="def">DEF: <span>${def}</span></small>
+			<class="def">DEF: ${def}
 			</div>
 			<div class="detail-stats-row">
-			<small class="spatk">SP.ATK: <span>${spatk}</span></small>
+			<class="spatk">SP.ATK: ${spatk}
 			</div>
 			<div class="detail-stats-row">
-			<small class="spdef">SP.DEF: <span>${spdef}</span></small>
+			<class="spdef">SP.DEF: ${spdef}
 			</div>
 			<div class="detail-stats-row">
-			<small class="spd">SPD: <span>${spd}</span></small>
+			<class="spd">SPD: ${spd}
 			</div>
 			<div class="back"><img src="/images/backbutton.png" onclick="deleteSinglePokemon(${pokemon.id})"></div>
 		</div>

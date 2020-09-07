@@ -27,7 +27,7 @@ h1 {
 .page{
     min-height: 100vh;
 }
-.info{
+.info .type{
 	text-transform: capitalize;
 }
 .poke-container {
@@ -48,6 +48,9 @@ h1 {
 	width: 50vh;
 	position: fixed;
 	top: 0%;	
+}
+.single-pokemon .name{
+	text-transform: capitalize;
 }
 
 .back img{
@@ -112,4 +115,5 @@ h1 {
 	left: -17px;
 	position: relative;
 	overflow: hidden;
+	text-transform: capitalize;
 }
