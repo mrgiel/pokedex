@@ -1,0 +1,160 @@
+const poke_container = document.getElementById('poke_container');
+const pokemons_number = 493;
+const types = {
+	fire: 'rgb(247 163 163)',
+	grass: '#DEFDE0',
+	electric: 'rgb(251 240 186)',
+	water: 'rgb(196 236 255)',
+	ground: 'rgb(255 207 159)',
+	rock: 'rgb(183 154 83)',
+	fairy: '#fceaff',
+	poison: 'rgb(224 197 222)',
+	bug: 'rgb(179 185 73)',
+	dragon: '#97b3e6',
+	psychic: 'rgb(255 177 199)',
+	flying: 'rgb(207 213 222)',
+	fighting: '#E6E0D4',
+  	normal: '#F5F5F5',
+  	steel: '#B8B8D0',
+ 	dark: '#705848',
+ 	ice: 'rgb(184 255 245)',
+ 	ghost: '#bf90fd'
+};
+const main_types = Object.keys(types);
+
+
+const fetchPokemons = async () => {
+	for (let i = 1; i <= pokemons_number; i++) {
+    await getPokemon(i);
+	}
+};
+
+const getPokemon = async id => {
+	const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+	const res = await fetch(url);
+  	const pokemon = await res.json();
+    createPokemonCard(pokemon);
+};
+function deleteSinglePokemon(){
+	document.getElementById('single-pokemon').remove();
+}
+
+function createPokemonCard(pokemon) {
+	const pokemonEl = document.createElement('div');
+	pokemonEl.classList.add("pokemon");
+	
+ 	const poke_types = pokemon.types.map((type) => type.type.name);
+ 	const background = main_types.find(type => poke_types.indexOf(type) == 0);
+ 	const type = pokemon.types.map((type) => type.type.name).join(', ');
+	const name = pokemon.name;
+	const color = types[background];
+  
+	
+  pokemonEl.style.backgroundColor = color;
+  
+
+	const pokeInnerHTML = `
+		<div class="info">
+		<h3 class="name">${name}</h3>
+		<span class="number">#${pokemon.id
+			.toString()
+			.padStart(3, '0')}</span>
+		</div>
+        <div class="img-container" onclick="selectPokemon(${pokemon.id})">
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
+							pokemon.id
+							.toString()
+							.padStart(3, '0')
+						}.png" alt="${name}" />
+        </div>
+        <div class="info">
+			<small class="type">Type: <span>${type}</span></small>
+		</div>
+    `;
+
+	pokemonEl.innerHTML = pokeInnerHTML;
+
+	poke_container.appendChild(pokemonEl);
+}
+const selectPokemon = async (id) => {
+	const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+	const res = await fetch(url);
+	const pokemon = await res.json();
+	displayPopup(pokemon);
+};
+
+const displayPopup = (pokemon) => {
+	const pokemonEl = document.createElement('div');
+	pokemonEl.classList.add("single-pokemon");
+	pokemonEl.id = "single-pokemon";
+	
+ 	const poke_types = pokemon.types.map((type) => type.type.name);
+ 	const background = main_types.find(type => poke_types.indexOf(type) == 0);
+ 	const type = pokemon.types.map((type) => type.type.name).join(', ');
+	const name = pokemon.name[0].toUpperCase() + pokemon.name.slice(1);
+	const color = types[background];
+	const base_stats = pokemon.stats.map((stat) => stat.base_stat);
+	let test = stat => base_stats.indexOf(stat)==0;
+	const hp = base_stats[0];
+	const atk = base_stats[1];
+	const def = base_stats[2];
+	const spatk = base_stats[3];
+	const spdef = base_stats[4];
+	const spd = base_stats[5];
+
+	pokemonEl.style.backgroundColor = color;
+  
+
+	const singlepokeInnerHTML = `
+	<div class="img-container">
+		<img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
+						pokemon.id
+						.toString()
+						.padStart(3, '0')
+					}.png" alt="${name}" />
+	</div>
+	<div class="info">
+		<span class="number">#${pokemon.id
+						.toString()
+						.padStart(3, '0')}</span>
+		<h3 class="name">${name}</h3>
+		<small class="type">Type: <span>${type}</span></small><br><br>
+
+		<small class="weight">Weight: <span>${pokemon.weight}</span></small><br>
+		<small class="height">Height: <span>${pokemon.height}</span></small><br><br>
+
+		<div class="detail-stats">
+			<div class="detail-stats-row">
+			<small class="hp">HP: <span>${hp}</span></small>
+			</div>
+			<div class="detail-stats-row">
+			<small class="atk">ATK: <span>${atk}</span></small>
+			</div>
+			<div class="detail-stats-row">
+			<small class="def">DEF: <span>${def}</span></small>
+			</div>
+			<div class="detail-stats-row">
+			<small class="spatk">SP.ATK: <span>${spatk}</span></small>
+			</div>
+			<div class="detail-stats-row">
+			<small class="spdef">SP.DEF: <span>${spdef}</span></small>
+			</div>
+			<div class="detail-stats-row">
+			<small class="spd">SPD: <span>${spd}</span></small>
+			</div>
+			<div class="back"><img src="/images/backbutton.png" onclick="deleteSinglePokemon(${pokemon.id})"></div>
+		</div>
+	</div>
+`;
+
+pokemonEl.innerHTML = singlepokeInnerHTML;
+
+poke_container.appendChild(pokemonEl);
+};
+
+fetchPokemons();
+
+/*	let element = document.getElementById("poke_container");
+	while (element.firstChild) {
+  		element.removeChild(element.firstChild);
+	}*/
