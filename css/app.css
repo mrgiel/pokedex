@@ -6,9 +6,7 @@
 }
 
 body {
-	background: #EFEFBB;
-	background: -webkit-linear-gradient(to bottom right, #fff, #ef4036);
-	background: linear-gradient(to bottom right, #fff, #ef4036);
+	background: #e7e7e7;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -20,6 +18,11 @@ body {
 h1 {
     letter-spacing: 3px;
     text-align: center;
+}
+.logo{
+	width: 300px;
+	text-align: center;
+	margin: auto;
 }
 .page{
     min-height: 100vh;
@@ -37,8 +40,8 @@ h1 {
 }
 .single-pokemon {
 	background-color: #eee;
-	border-radius: 20px;
-	box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
+	border-radius: 10px;
+	box-shadow: 0 3px 15px rgba(100, 100, 100, 0.2);
 	margin: 10px;
 	padding: 20px;
 	text-align: center;
@@ -60,8 +63,8 @@ h1 {
 
 .pokemon {
 	background-color: #eee;
-	border-radius: 20px;
-	box-shadow: 0 3px 15px rgba(100, 100, 100, 0.5);
+	border-radius: 10px;
+	box-shadow: 0 3px 15px rgba(100, 100, 100, 0.2);
 	margin: 10px;
 	padding: 20px;
     text-align: center;
@@ -73,7 +76,7 @@ h1 {
     transform: scale(1.2);
 }
 
-.pokemon .img-container {
+.pokemon .img_container {
 	background-color: rgba(255, 255, 255, 0.6);
 	border-radius: 50%;
 	width: 120px;
@@ -81,11 +84,11 @@ h1 {
 	text-align: center;
 	margin: 15px 0;
 }
-.pokemon .img-container:hover{
+.pokemon .img_container:hover{
 	cursor:pointer;
 }
 
-.pokemon .img-container img {
+.pokemon .img_container img {
 	margin-top: 20px;
 	max-width: 90%;
 }
@@ -94,7 +97,7 @@ h1 {
 	margin-top: 0px;
 }
 
-.pokemon .number {
+.number {
 	background-color: rgba(0, 0, 0, 0.1);
 	border-radius: 10px;
 	font-size: 0.8em;
@@ -108,4 +111,5 @@ h1 {
 	width: 155px;
 	left: -17px;
 	position: relative;
+	overflow: hidden;
 }

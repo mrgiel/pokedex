@@ -37,6 +37,7 @@ const getPokemon = async id => {
 };
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
+	console.log('asdas');
 }
 
 function createPokemonCard(pokemon) {
@@ -60,7 +61,7 @@ function createPokemonCard(pokemon) {
 			.toString()
 			.padStart(3, '0')}</span>
 		</div>
-        <div class="img-container" onclick="selectPokemon(${pokemon.id})">
+        <div class="img_container" onclick="selectPokemon(${pokemon.id})">
             <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
 							pokemon.id
 							.toString()
@@ -72,7 +73,7 @@ function createPokemonCard(pokemon) {
 		</div>
     `;
 
-	pokemonEl.innerHTML = pokeInnerHTML;
+	pokemonEl.innerHTML = pokeInnerHTML.split('-').join(' ');
 
 	poke_container.appendChild(pokemonEl);
 }
@@ -84,6 +85,9 @@ const selectPokemon = async (id) => {
 };
 
 const displayPopup = (pokemon) => {
+	if(document.getElementById('single-pokemon') != null){
+		document.getElementById('single-pokemon').remove();
+		}
 	const pokemonEl = document.createElement('div');
 	pokemonEl.classList.add("single-pokemon");
 	pokemonEl.id = "single-pokemon";
@@ -106,20 +110,21 @@ const displayPopup = (pokemon) => {
   
 
 	const singlepokeInnerHTML = `
-	<div class="img-container">
-		<img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
-						pokemon.id
-						.toString()
-						.padStart(3, '0')
-					}.png" alt="${name}" />
-	</div>
 	<div class="info">
+		<h3 class="name">${name}</h3>
 		<span class="number">#${pokemon.id
 						.toString()
 						.padStart(3, '0')}</span>
-		<h3 class="name">${name}</h3>
+	</div>
+	<div class="img_container">
+	<img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
+					pokemon.id
+					.toString()
+					.padStart(3, '0')
+				}.png" alt="${name}" />
+	</div>
+	<div class="info">
 		<small class="type">Type: <span>${type}</span></small><br><br>
-
 		<small class="weight">Weight: <span>${pokemon.weight}</span></small><br>
 		<small class="height">Height: <span>${pokemon.height}</span></small><br><br>
 
