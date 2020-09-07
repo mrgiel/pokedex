@@ -117,3 +117,8 @@ h1 {
 	overflow: hidden;
 	text-transform: capitalize;
 }
+.add_button {
+	position: absolute;
+	top: 1px;
+	left: 1px;
+  }
