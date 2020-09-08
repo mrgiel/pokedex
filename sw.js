@@ -1,30 +1,47 @@
-self.addEventListener('install', function(event){
+const cacheName = 'v1';
+
+const cacheAssets = [
+    'index.html',
+    'sw.js',
+    'manifest.json',
+    '/css/app.css',
+    '/js/app.js'
+]
+
+
+
+
+
+self.addEventListener('install', e => {
     console.log('SW Installed');
-    event.waitUntil(
-        caches.open('static')
-        .then(function(cache){
-            cache.addAll([
-                '/',
-                '/js/app.js', 
-                '/css/app.css',
-            ]);
+
+    e.waitUntil(
+        caches
+        .open(cacheName)
+        .then(cache => {
+            console.log('Service Worker: Caching Files');
+            cache.addAll(cacheAssets);
+        })
+        .then(()=> self.skipWaiting())
+    );
+});
+
+
+self.addEventListener('activate', e => {
+    console.log('SW Activated');
+
+    e.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if(cache !== cacheName){
+                        console.log('Service Worker: Clearing Old Cache');
+                        return caches.delete(cache);
+                    }
+                })
+            )
         })
     );
 });
 
-self.addEventListener('activate', function(){
-    console.log('SW Activated')
-});
 
-self.addEventListener('fetch', function(event){
-    event.respondWith(
-        caches.match(event.request)
-        .then(function(res){
-            if(res){
-                return res;
-            } else{
-                fetch(event.request);
-            }
-        })
-    );
-});
