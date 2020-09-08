@@ -110,6 +110,8 @@ const displayPopup = (pokemon) => {
 	const spatk = base_stats[3];
 	const spdef = base_stats[4];
 	const spd = base_stats[5];
+	const weight = pokemon.weight / 10;
+	const height = pokemon.height / 10;
 
 	pokemonEl.style.backgroundColor = color;
   
@@ -130,8 +132,8 @@ const displayPopup = (pokemon) => {
 	</div>
 	<div class="info">
 		<div class="type">Type: ${type}</div><br>
-		<div class="weight">Weight: ${pokemon.weight} kg</div>
-		<div class="height">Height: ${pokemon.height} m</div><br>
+		<div class="weight">Weight: ${weight} kg</div>
+		<div class="height">Height: ${height} m</div><br>
 
 		<div class="detail-stats">
 			<div class="detail-stats-row">
