@@ -81,6 +81,7 @@ function createPokemonCard(pokemon) {
 	poke_container.appendChild(pokemonEl);
 }
 const selectPokemon = async (id) => {
+	console.log("JA")
 	event.preventDefault();
 	if(!pokeCache[id]){
 		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
