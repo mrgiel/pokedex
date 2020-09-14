@@ -124,8 +124,6 @@ h1 {
     height: 11px;
 	top: -14px;
 	left: 100px;
-	border: 2px solid black;
-	border-radius: 10px;
 }
 .progress-bar{
     background: firebrick;
