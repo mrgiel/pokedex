@@ -1,11 +1,12 @@
-const cacheName = 'v1';
+const cacheName = 'v2';
 
 const cacheAssets = [
     'index.html',
     'sw.js',
     'manifest.json',
     '/css/app.css',
-    '/js/app.js'
+    '/js/app.js',
+    '/images/backbutton.png'
 ]
 
 
