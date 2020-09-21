@@ -2,6 +2,7 @@ const poke_container = document.getElementById('poke_container');
 const pokeCache = {};
 const pokemons_number = 493;
 var pokname = [];
+const Datastore = require('nedb'); 
 const types = {
 	fire: 'rgb(247 163 163)',
 	grass: '#DEFDE0',
@@ -24,6 +25,9 @@ const types = {
 };
 const main_types = Object.keys(types);
 
+const database = new Datastore(database.db);
+database.loadDatabase();
+database.insert({name: 'Giel'});
 
 const fetchPokemons = async () => {
 	for (let i = 1; i <= pokemons_number; i++) {
