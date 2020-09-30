@@ -39,7 +39,6 @@ const getPokemon = async id => {
 	createPokemonCard(pokemon);
 	//console.log(pokemon.name);
 	pokname.push(pokemon.name);
-
 };
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
@@ -211,6 +210,8 @@ if ('serviceWorker' in navigator) {
 		  });
 	});
   }
+
+
 
 
 
