@@ -136,6 +136,11 @@ h1 {
 	.detail-stats-row{
 		margin: 0 15%;
 	}
+	.pokemon:hover{
+		-webkit-transform:none;
+		-ms-transform: none;
+		transform: none;
+	}
 }
 
 

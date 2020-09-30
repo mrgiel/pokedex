@@ -1,54 +1,49 @@
-const cacheName = 'v1';
-
-const cacheAssets = [
+const CACHE_NAME = 'v1.02';
+const FILES_TO_CACHE = [
+    '/offline.html',
     'index.html',
     'sw.js',
     'manifest.json',
     '/css/app.css',
-    '/js/app.js'
-]
+    '/js/app.js',
+    '/images/backbutton.png'
+  ];
 
 
-
-
-
-self.addEventListener('install', e => {
+self.addEventListener('install', evt => {
     console.log('SW Installed');
 
-    e.waitUntil(
-        caches
-        .open(cacheName)
-        .then(cache => {
-            console.log('Service Worker: Caching Files');
-            cache.addAll(cacheAssets);
-        })
-        .then(()=> self.skipWaiting())
-    );
+    evt.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('[ServiceWorker] Pre-caching offline page');
+        return cache.addAll(FILES_TO_CACHE);
+      })
+  );
 });
 
 
-self.addEventListener('activate', e => {
+self.addEventListener('activate', evt => {
     console.log('SW Activated');
 
-    e.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cache => {
-                    if(cache !== cacheName){
-                        console.log('Service Worker: Clearing Old Cache');
-                        return caches.delete(cache);
-                    }
-                })
-            )
-        })
-    );
+    evt.waitUntil(
+      caches.keys().then((keyList) => {
+        return Promise.all(keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[ServiceWorker] Removing old cache', key);
+            return caches.delete(key);
+          }
+        }));
+      })
+  );
 });
 
-self.addEventListener('fetch', e => {
-    console.log('Service Worker: Fetching');
-    e.respondWith(
-        fetch(e.request).catch(() => caches.match(e.request))
-    )
-})
+self.addEventListener('fetch', evt => {
+  evt.respondWith(
+    caches.match(evt.request).then(function(response) {
+      return response || fetch(evt.request);
+    })
+  );
+});
+
 
 
