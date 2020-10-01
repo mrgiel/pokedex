@@ -2,7 +2,7 @@
     "name": "PokéDex",
     "short_name": "PokéDex",
     "author": "Giel van Bussel",
-    "start_url": ".",
+    "start_url": "/index.html",
     "display": "fullscreen",
     "background_color": "#fff",
     "theme_color": "#365eab",

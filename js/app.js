@@ -39,8 +39,6 @@ const getPokemon = async id => {
 	createPokemonCard(pokemon);
 	//console.log(pokemon.name);
 	pokname.push(pokemon.name);
-	localStorage.setItem("pokemon", pokemon.name);
-	console.log(localStorage.getItem("pokemon"));
 };
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
@@ -83,8 +81,6 @@ function createPokemonCard(pokemon) {
 	poke_container.appendChild(pokemonEl);
 }
 const selectPokemon = async (id) => {
-	console.log("JA")
-	event.preventDefault();
 	if(!pokeCache[id]){
 		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
 		const res = await fetch(url);
@@ -111,7 +107,6 @@ const displayPopup = (pokemon) => {
 	const name = pokemon.name;
 	const color = types[background];
 	const base_stats = pokemon.stats.map((stat) => stat.base_stat);
-	let test = stat => base_stats.indexOf(stat)==0;
 	const hp = base_stats[0];
 	const atk = base_stats[1];
 	const def = base_stats[2];
@@ -205,22 +200,8 @@ poke_container.appendChild(pokemonEl);
 
 fetchPokemons();
 
-if ('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker
-			.register('/sw.js')
-			.then(reg => console.log('Service Worker: Registered'))
-			.catch(err => console.log(`Service Worker: Error: ${err}`));
-	});
-}
 
 
-
-
-/*	let element = document.getElementById("poke_container");
-	while (element.firstChild) {
-  		element.removeChild(element.firstChild);
-	}*/
 //var pokname = [];
 
 // function autocomplete(inp, arr) {
