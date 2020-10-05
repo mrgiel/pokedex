@@ -1,5 +1,4 @@
-const dynamicCache = 'dynamic-cache-v1';
-const staticCacheName = 'cache-static-v1';
+const cacheName = 'cache-static-v1';
 const staticResources = [
   '/',
   'offline.html',
@@ -11,18 +10,32 @@ const staticResources = [
   '/images/backbutton.png'
 ];
 
+
+self.addEventListener('activate', event => {
+  console.log('SW Activated');
+
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+              cacheNames.map(cache => {
+                    if(cache !== cacheName){
+                        console.log('Service Worker: Clearing Old Cache');
+                        return caches.delete(cache);
+                    }
+                })
+            )
+        })
+    );
+});
+
 self.addEventListener('install', event => {
   console.log('Service worker install event!');
   event.waitUntil(
-    caches.open(staticCacheName)
+    caches.open(cacheName)
       .then(cache => {
         return cache.addAll(staticResources);
       })
   );
-});
-
-self.addEventListener('activate', event => {
-  console.log('Service worker activate event!');
 });
 
 // fetch event
@@ -31,11 +44,10 @@ self.addEventListener('fetch', evt => {
     evt.respondWith(
         caches.match(evt.request).then(cacheRes => {
           if (cacheRes){
-          console.log(cacheRes)
             return cacheRes;
           }
             return fetch(evt.request).then(fetchRes => {
-                return caches.open(dynamicCache).then(cache => {
+                return caches.open(cacheName).then(cache => {
                     cache.put(evt.request.url, fetchRes.clone());
                     return fetchRes;
                 })

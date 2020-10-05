@@ -25,6 +25,7 @@ const types = {
 };
 const main_types = Object.keys(types);
 
+
 const fetchPokemons = async () => {
 	for (let i = 1; i <= pokemons_number; i++) {
     await getPokemon(i);
@@ -37,7 +38,7 @@ const getPokemon = async id => {
 	const res = await fetch(url);
   	const pokemon = await res.json();
 	createPokemonCard(pokemon);
-	//console.log(pokemon.name);
+
 	pokname.push(pokemon.name);
 };
 function deleteSinglePokemon(){
@@ -76,7 +77,7 @@ function createPokemonCard(pokemon) {
 			<small class="type">Type: <span>${type}</span></small>
 		</div>
     `;
-	pokemonEl.innerHTML = pokeInnerHTML.replace('pikachu', 'Micachu').split('-').join(' ');
+	pokemonEl.innerHTML = pokeInnerHTML.replace('pikachu', 'Micachu').split('-').join(' ').replace('ninjask', 'Klaske Gasgeef');
 
 	poke_container.appendChild(pokemonEl);
 }
