@@ -1,53 +1,51 @@
-const cacheName = 'cache-static-v1';
-const staticResources = [
-  '/',
-  'offline.html',
-  'index.html',
-  'sw.js',
-  'manifest.json',
-  '/css/app.css',
-  '/js/app.js',
-  '/images/backbutton.png'
-];
+const CACHE_NAME = 'v1';
+const FILES_TO_CACHE = [
+    'index.html',
+    'sw.js',
+    'manifest.json',
+    '/css/app.css',
+    '/js/app.js',
+    '/images/backbutton.png'
+  ];
 
 
-self.addEventListener('activate', event => {
-  console.log('SW Activated');
 
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-              cacheNames.map(cache => {
-                    if(cache !== cacheName){
-                        console.log('Service Worker: Clearing Old Cache');
-                        return caches.delete(cache);
-                    }
-                })
-            )
-        })
-    );
+
+self.addEventListener('install', evt => {
+    console.log('SW Installed');
+
+    evt.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('[ServiceWorker] Pre-caching offline page');
+        return cache.addAll(FILES_TO_CACHE);
+      })
+  );
 });
 
-self.addEventListener('install', event => {
-  console.log('Service worker install event!');
-  event.waitUntil(
-    caches.open(cacheName)
-      .then(cache => {
-        return cache.addAll(staticResources);
+
+self.addEventListener('activate', evt => {
+    console.log('SW Activated');
+    evt.waitUntil(
+      caches.keys().then((keyList) => {
+        return Promise.all(keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[ServiceWorker] Removing old cache', key);
+            return caches.delete(key);
+          }
+        }));
       })
   );
 });
 
 // fetch event
 self.addEventListener('fetch', evt => {
-  // console.log('fetch event', evt);
     evt.respondWith(
         caches.match(evt.request).then(cacheRes => {
           if (cacheRes){
             return cacheRes;
           }
             return fetch(evt.request).then(fetchRes => {
-                return caches.open(cacheName).then(cache => {
+                return caches.open(CACHE_NAME).then(cache => {
                     cache.put(evt.request.url, fetchRes.clone());
                     return fetchRes;
                 })
@@ -55,5 +53,3 @@ self.addEventListener('fetch', evt => {
         })
    );
 });
-
-
