@@ -2,6 +2,7 @@ const poke_container = document.getElementById('poke_container');
 const pokeCache = {};
 const pokemons_number = 493;
 var pokname = [];
+var list = document.getElementById("pokemons");
 
 const types = {
 	fire: 'rgb(247 163 163)',
@@ -27,20 +28,42 @@ const main_types = Object.keys(types);
 
 
 const fetchPokemons = async () => {
+	const promises = [];
+
 	for (let i = 1; i <= pokemons_number; i++) {
-    await getPokemon(i);
+	//await getPokemon(i);
+	promises.push(getPokemon(i).then((res) => res));
 	}
+	Promise.all(promises).then((res) => {
+		//console.log(res);
+		res.forEach(pokemon => {
+			createPokemonCard(pokemon);
+			pokname.push(pokemon.name);
+			createSearchList(pokemon);
+		})
+	});
 };
 
 
 const getPokemon = async id => {
 	const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-	const res = await fetch(url);
-  	const pokemon = await res.json();
+	return await fetch(url)
+	.then((res) => {
+		//console.log(res);
+		return res.json();
+	});
+  	/*const pokemon = await res.json();
 	createPokemonCard(pokemon);
-
+	
 	pokname.push(pokemon.name);
+	createSearchList(pokemon);*/
 };
+function createSearchList(pokemon){
+	var option = document.createElement('option');
+	option.value = pokemon.id;
+	option.innerHTML = pokemon.name;
+	list.appendChild(option);
+}
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
 }
@@ -81,17 +104,23 @@ function createPokemonCard(pokemon) {
 
 	poke_container.appendChild(pokemonEl);
 }
+const pokemonForm = document.getElementById("searchPokemon");
+	pokemonForm.addEventListener("submit", (e) => {
+		e.preventDefault();
+		let pokemonId = pokemonForm.pokemon.value;
+		console.log(pokemonId);
+		selectPokemon(pokemonId);
+
+});
 const selectPokemon = async (id) => {
 	if(!pokeCache[id]){
 		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
 		const res = await fetch(url);
 		const pokemon = await res.json();
 		pokeCache[id] = pokemon;
-		//console.log(pokeCache);
 		displayPopup(pokemon);
 	}
 	displayPopup(pokeCache[id]);
-	console.log("JAHOORRRR")
 };
 
 const displayPopup = (pokemon) => {
@@ -194,110 +223,9 @@ const displayPopup = (pokemon) => {
 `;
 
 pokemonEl.innerHTML = singlepokeInnerHTML;
-pokemonEl.innerHTML = singlepokeInnerHTML.replace('pikachu', 'Micachu');
+pokemonEl.innerHTML = singlepokeInnerHTML.replace('pikachu', 'Micachu').replace('ninjask', 'Klaske Gasgeef');
 
 poke_container.appendChild(pokemonEl);
 };
 
 fetchPokemons();
-
-
-
-//var pokname = [];
-
-// function autocomplete(inp, arr) {
-// 	/*the autocomplete function takes two arguments,
-// 	the text field element and an array of possible autocompleted values:*/
-// 	var currentFocus;
-// 	/*execute a function when someone writes in the text field:*/
-// 	inp.addEventListener("input", function(e) {
-// 		var a, b, i, val = this.value;
-// 		/*close any already open lists of autocompleted values*/
-// 		closeAllLists();
-// 		if (!val) { return false;}
-// 		currentFocus = -1;
-// 		/*create a DIV element that will contain the items (values):*/
-// 		a = document.createElement("DIV");
-// 		a.setAttribute("id", this.id + "autocomplete-list");
-// 		a.setAttribute("class", "autocomplete-items");
-// 		/*append the DIV element as a child of the autocomplete container:*/
-// 		this.parentNode.appendChild(a);
-// 		/*for each item in the array...*/
-// 		for (i = 0; i < arr.length; i++) {
-// 			/*check if the item starts with the same letters as the text field value:*/
-// 			if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-// 			/*create a DIV element for each matching element:*/
-// 			b = document.createElement("DIV");
-// 			/*make the matching letters bold:*/
-// 			b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-// 			b.innerHTML += arr[i].substr(val.length);
-// 			/*insert a input field that will hold the current array item's value:*/
-// 			b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-// 			/*execute a function when someone clicks on the item value (DIV element):*/
-// 				b.addEventListener("click", function(e) {
-// 				/*insert the value for the autocomplete text field:*/
-// 				inp.value = this.getElementsByTagName("input")[0].value;
-// 				/*close the list of autocompleted values,
-// 				(or any other open lists of autocompleted values:*/
-// 				closeAllLists();
-// 			});
-// 			a.appendChild(b);
-// 			}
-// 		}
-// 	});
-// /*execute a function presses a key on the keyboard:*/
-// inp.addEventListener("keydown", function(e) {
-// 	var x = document.getElementById(this.id + "autocomplete-list");
-// 	if (x) x = x.getElementsByTagName("div");
-// 	if (e.keyCode == 40) {
-// 		/*If the arrow DOWN key is pressed,
-// 		increase the currentFocus variable:*/
-// 		currentFocus++;
-// 		/*and and make the current item more visible:*/
-// 		addActive(x);
-// 	} else if (e.keyCode == 38) { //up
-// 		/*If the arrow UP key is pressed,
-// 		decrease the currentFocus variable:*/
-// 		currentFocus--;
-// 		/*and and make the current item more visible:*/
-// 		addActive(x);
-// 	} else if (e.keyCode == 13) {
-// 		/*If the ENTER key is pressed, prevent the form from being submitted,*/
-// 		e.preventDefault();
-// 		if (currentFocus > -1) {
-// 		/*and simulate a click on the "active" item:*/
-// 		if (x) x[currentFocus].click();
-// 		}
-// 	}
-// });
-// function addActive(x) {
-// 	/*a function to classify an item as "active":*/
-// 	if (!x) return false;
-// 	/*start by removing the "active" class on all items:*/
-// 	removeActive(x);
-// 	if (currentFocus >= x.length) currentFocus = 0;
-// 	if (currentFocus < 0) currentFocus = (x.length - 1);
-// 	/*add class "autocomplete-active":*/
-// 	x[currentFocus].classList.add("autocomplete-active");
-// }
-// function removeActive(x) {
-// 	/*a function to remove the "active" class from all autocomplete items:*/
-// 	for (var i = 0; i < x.length; i++) {
-// 	x[i].classList.remove("autocomplete-active");
-// 	}
-// }
-// function closeAllLists(elmnt) {
-// 	/*close all autocomplete lists in the document,
-// 	except the one passed as an argument:*/
-// 	var x = document.getElementsByClassName("autocomplete-items");
-// 	for (var i = 0; i < x.length; i++) {
-// 	if (elmnt != x[i] && elmnt != inp) {
-// 	x[i].parentNode.removeChild(x[i]);
-// 	}
-// }
-// }
-// /*execute a function when someone clicks in the document:*/
-// document.addEventListener("click", function (e) {
-// 	closeAllLists(e.target);
-// });
-// }
