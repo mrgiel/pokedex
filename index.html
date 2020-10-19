@@ -10,18 +10,20 @@
   <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+<div id="nav-bar">
+  <div class="logo"><img src="/images/pokedex.svg"></div>
 
+  <form id="searchPokemon">
+      <input type="text" list="pokemons" name="pokemon" id="pokemon" placeholder="Search...">
+      <datalist id="pokemons">
+      </datalist>
+  </form>
+</div>
 
-<form id="searchPokemon">
-    <input list="pokemons" name="pokemon" id="pokemon" placeholder="Search...">
-    <datalist id="pokemons">
-    </datalist>
-    <input type="submit">
-</form>
-
-
-<div class="logo"><img src="/images/pokedex.svg"></div>
+<div id="page">
 <div id="poke_container" class="poke-container"></div>
+</div>
+<div id="loading"></div>
 
 <footer>
 </footer> 
@@ -39,6 +41,39 @@
   }
   </script> 
 <script src="/js/app.js"></script>
+</script>
+<script>
+  function onReady(callback) {
+    var intervalID = window.setInterval(checkReady, 1000);
+
+    function checkReady() {
+        if (document.getElementsByTagName('body')[0] !== undefined) {
+            window.clearInterval(intervalID);
+            callback.call(this);
+        }
+    }
+}
+
+function show(id, value) {
+    document.getElementById(id).style.display = value ? 'block' : 'none';
+}
+
+onReady(function () {
+    show('page', true);
+    show('loading', false);
+});
+</script>
+<script>
+  var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("nav-bar").style.top = "0";
+  } else {
+    document.getElementById("nav-bar").style.top = "-12%";
+  }
+  prevScrollpos = currentScrollPos;
+}
 </script>
 </body>
 </html>

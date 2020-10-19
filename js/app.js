@@ -26,11 +26,9 @@ const types = {
 };
 const main_types = Object.keys(types);
 
-
 const fetchPokemons = async () => {
 	const promises = [];
-
-	for (let i = 1; i <= pokemons_number; i++) {
+	for (let i = 1; i <= 75; i++) {
 	//await getPokemon(i);
 	promises.push(getPokemon(i).then((res) => res));
 	}
@@ -42,6 +40,19 @@ const fetchPokemons = async () => {
 			createSearchList(pokemon);
 		})
 	});
+	const scndPromises = [];
+	for (let i = 76; i <= pokemons_number; i++) {
+		//await getPokemon(i);
+		scndPromises.push(getPokemon(i).then((res) => res));
+		}
+		Promise.all(scndPromises).then((res) => {
+			//console.log(res);
+			res.forEach(pokemon => {
+				createPokemonCard(pokemon);
+				pokname.push(pokemon.name);
+				createSearchList(pokemon);
+			})
+		});
 };
 
 
