@@ -48,7 +48,7 @@ h1 {
 	justify-content: center;
 	margin: 0 auto;
 	max-width: 1200px;
-	margin-top: 7%;
+	margin-top: 8%;
 }
 .single-pokemon {
 	background-color: #eee;
@@ -60,13 +60,19 @@ h1 {
 	width: 50vh;
 	position: fixed;
 	top: 0%;	
+	z-index: 999;
 }
 .single-pokemon .name{
 	text-transform: capitalize;
 }
+.back{
+	position: absolute;
+    top: 0%;
+    margin: 3% 3% 0 0;
+	right: 0%;
+}
 .back img{
-		width: 50px;
-		margin-top: 20px;
+		width: 40px;
 }
 .back img:hover {
 	cursor: pointer;
@@ -150,18 +156,6 @@ h1 {
     height: 100%;
 }
 
-@media only screen and (max-width: 480px) {
-	.detail-stats-row{
-		margin: 0 15%;
-	}
-	.pokemon:hover{
-		-webkit-transform:none;
-		-ms-transform: none;
-		transform: none;
-	}
-}
-
-
 input {
 	border: 1px solid transparent;
 	background-color: #f1f1f1;
@@ -205,4 +199,30 @@ input[type=text] {
     background-image: url("https://thumbs.gfycat.com/DampSpanishCleanerwrasse-size_restricted.gif");
     background-repeat: no-repeat;
     background-position: center;
+}
+.stop-scrolling {
+	height: 100%;
+	overflow: hidden;
+  }
+
+
+
+  @media only screen and (max-width: 600px) {
+	.detail-stats-row{
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	}
+	.single-pokemon{
+		width: 80vh;
+	}
+	.pokemon:hover{
+		-webkit-transform:none;
+		-ms-transform: none;
+		transform: none;
+	}
+	.poke-container{
+		margin-top: 15%;
+	}
 }

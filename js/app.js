@@ -3,6 +3,7 @@ const pokeCache = {};
 const pokemons_number = 493;
 var pokname = [];
 var list = document.getElementById("pokemons");
+var y_offsetWhenScrollDisabled=0;
 
 const types = {
 	fire: 'rgb(247 163 163)',
@@ -124,6 +125,7 @@ const pokemonForm = document.getElementById("searchPokemon");
 
 });
 const selectPokemon = async (id) => {
+	disableScroll();
 	if(!pokeCache[id]){
 		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
 		const res = await fetch(url);
@@ -238,5 +240,18 @@ pokemonEl.innerHTML = singlepokeInnerHTML.replace('pikachu', 'Micachu').replace(
 
 poke_container.appendChild(pokemonEl);
 };
+
+function preventDefault(e){
+    e.preventDefault();
+}
+
+function disableScroll(){
+	console.log('yes');
+    document.body.addEventListener('touchmove', preventDefault, { passive: false });
+	document.body.addEventListener('DOMMouseScroll', preventDefault, true);
+}
+function enableScroll(){
+    document.body.removeEventListener('touchmove', preventDefault, { passive: false });
+}
 
 fetchPokemons();

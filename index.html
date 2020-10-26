@@ -14,7 +14,7 @@
   <div class="logo"><img src="/images/pokedex.svg"></div>
 
   <form id="searchPokemon">
-      <input type="text" list="pokemons" name="pokemon" id="pokemon" placeholder="Search...">
+      <input type="text" list="pokemons" name="pokemon" id="pokemon">
       <datalist id="pokemons">
       </datalist>
   </form>
@@ -74,6 +74,20 @@ window.onscroll = function() {
   }
   prevScrollpos = currentScrollPos;
 }
+</script>
+<script>
+  input = document.getElementById('pokemon');
+
+function ph () {
+    input.setAttribute('placeholder','Search...');
+};
+
+function phr () {
+    input.setAttribute('placeholder', '');
+};
+
+input.addEventListener("mouseover", ph);
+input.addEventListener("mouseout", phr);
 </script>
 </body>
 </html>
