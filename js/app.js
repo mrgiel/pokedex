@@ -3,7 +3,6 @@ const pokeCache = {};
 const pokemons_number = 493;
 var pokname = [];
 var list = document.getElementById("pokemons");
-var y_offsetWhenScrollDisabled=0;
 
 const types = {
 	fire: 'rgb(247 163 163)',
@@ -78,11 +77,12 @@ function createSearchList(pokemon){
 }
 function deleteSinglePokemon(){
 	document.getElementById('single-pokemon').remove();
+	enableScroll();
 }
 
 function createPokemonCard(pokemon) {
 	const pokemonEl = document.createElement('div');
-	pokemonEl.classList.add("pokemon");
+
 	
  	const poke_types = pokemon.types.map((type) => type.type.name);
  	const background = main_types.find(type => poke_types.indexOf(type) == 0);
@@ -91,17 +91,18 @@ function createPokemonCard(pokemon) {
 	const color = types[background];
   
 	
-  pokemonEl.style.backgroundColor = color;
+  
   
 
 	const pokeInnerHTML = `
+	<div class="pokemon" style="background:${color};" onclick="selectPokemon(${pokemon.id})">
 		<div class="info">
 		<h3 class="name">${name}</h3>
 		<span class="number">#${pokemon.id
 			.toString()
 			.padStart(3, '0')}</span>
 		</div>
-        <div class="img_container" onclick="selectPokemon(${pokemon.id})">
+        <div class="img_container">
             <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
 							pokemon.id
 							.toString()
@@ -111,7 +112,8 @@ function createPokemonCard(pokemon) {
         <div class="info">
 			<small class="type">Type: <span>${type}</span></small>
 		</div>
-    `;
+	</div>
+	`;
 	pokemonEl.innerHTML = pokeInnerHTML.replace('pikachu', 'Micachu').split('-').join(' ').replace('ninjask', 'Klaske Gasgeef');
 
 	poke_container.appendChild(pokemonEl);
@@ -125,15 +127,16 @@ const pokemonForm = document.getElementById("searchPokemon");
 
 });
 const selectPokemon = async (id) => {
-	disableScroll();
 	if(!pokeCache[id]){
 		const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
 		const res = await fetch(url);
 		const pokemon = await res.json();
 		pokeCache[id] = pokemon;
 		displayPopup(pokemon);
+		disableScroll();
 	}
 	displayPopup(pokeCache[id]);
+	disableScroll();
 };
 
 const displayPopup = (pokemon) => {
@@ -163,69 +166,76 @@ const displayPopup = (pokemon) => {
   
 
 	const singlepokeInnerHTML = `
-	<div class="info">
+	<div class="pokeName">
 		<h3 class="name">${name}</h3>
 		<span class="number">#${pokemon.id
 						.toString()
 						.padStart(3, '0')}</span>
 	</div>
-	<div class="img_container">
-	<img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
-					pokemon.id
-					.toString()
-					.padStart(3, '0')
-				}.png" alt="${name}" />
-	</div>
-	<div class="info">
-		<div class="type">Type: ${type}</div><br>
-		<div class="weight">Weight: ${weight} kg</div>
-		<div class="height">Height: ${height} m</div><br>
-
-		<div class="detail-stats">
-			<div class="detail-stats-row">
-			<class="hp">HP: ${hp}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${hp / 2}px">
-					</div>
-				</div>
+	<div class="pokeInfo">
+		<div class="align-left">
+			<div class="img_container">
+			<img src="https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${
+							pokemon.id
+							.toString()
+							.padStart(3, '0')
+						}.png" alt="${name}" />
 			</div>
-
-			<div class="detail-stats-row">
-			<class="atk">ATK: ${atk}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${atk / 2}px">
-					</div>
-				</div>
+			<div class="info">
+			<div class="type">Type: ${type}</div><br>
+			<div class="weight">Weight: ${weight} kg</div>
+			<div class="height">Height: ${height} m</div><br>
 			</div>
-
-			<div class="detail-stats-row">
-			<class="def">DEF: ${def}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${def / 2}px">
+		</div>
+		<div class="align-right">
+			<div class="info">
+				<div class="detail-stats">
+					<div class="detail-stats-row">
+					<class="hp">HP: ${hp}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${hp / 2}px">
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="detail-stats-row">
-			<class="spatk">SP.ATK: ${spatk}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${spatk / 2}px">
+					<div class="detail-stats-row">
+					<class="atk">ATK: ${atk}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${atk / 2}px">
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="detail-stats-row">
-			<class="spdef">SP.DEF: ${spdef}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${spdef / 2}px">
+					<div class="detail-stats-row">
+					<class="def">DEF: ${def}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${def / 2}px">
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="detail-stats-row">
-			<class="spd">SPD: ${spd}
-				<div class="progress">
-					<div class="progress-bar" style="width: ${spd / 2}px">
+					<div class="detail-stats-row">
+					<class="spatk">SP.ATK: ${spatk}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${spatk / 2}px">
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-stats-row">
+					<class="spdef">SP.DEF: ${spdef}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${spdef / 2}px">
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-stats-row">
+					<class="spd">SPD: ${spd}
+						<div class="progress">
+							<div class="progress-bar" style="width: ${spd / 2}px">
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -241,17 +251,13 @@ pokemonEl.innerHTML = singlepokeInnerHTML.replace('pikachu', 'Micachu').replace(
 poke_container.appendChild(pokemonEl);
 };
 
-function preventDefault(e){
-    e.preventDefault();
+function enableScroll(){
+	document.getElementById('body').style.overflow="auto";
 }
 
 function disableScroll(){
-	console.log('yes');
-    document.body.addEventListener('touchmove', preventDefault, { passive: false });
-	document.body.addEventListener('DOMMouseScroll', preventDefault, true);
-}
-function enableScroll(){
-    document.body.removeEventListener('touchmove', preventDefault, { passive: false });
+	document.getElementById('body').style.overflow="hidden";
 }
 
 fetchPokemons();
+

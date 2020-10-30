@@ -7,9 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PokéDex</title>
   <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/app-resp.css">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body>
+<body id="body">
 <div id="nav-bar">
   <div class="logo"><img src="/images/pokedex.svg"></div>
 
@@ -40,7 +41,6 @@
     });
   }
   </script> 
-<script src="/js/app.js"></script>
 </script>
 <script>
   function onReady(callback) {
@@ -89,5 +89,7 @@ function phr () {
 input.addEventListener("mouseover", ph);
 input.addEventListener("mouseout", phr);
 </script>
+<script src="/js/app.js"></script>
+<script src="/js/db.js"></script>
 </body>
 </html>
